@@ -5,9 +5,8 @@ import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  // Use repo name as base when deploying to GitHub Pages project site
-  // e.g. https://owner.github.io/<repo>/
-  base: process.env.GITHUB_REPOSITORY ? `/${process.env.GITHUB_REPOSITORY.split("/").pop()}/` : "/",
+  // Use package.json homepage if present; fallback to repo name or root
+  base: (process.env.npm_package_homepage && new URL(process.env.npm_package_homepage).pathname) || "/FlinTrack/",
   server: {
     host: "::",
     port: 8080,
