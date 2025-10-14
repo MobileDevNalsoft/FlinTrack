@@ -62,7 +62,17 @@ This project is built with:
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/e5c3f182-7738-4d60-ba82-92ed7aa5f64b) and click on Share -> Publish.
+### GitHub Pages (configured)
+
+This repo includes a GitHub Actions workflow that builds and publishes to GitHub Pages.
+
+Steps:
+
+1. Push to `main`.
+2. In GitHub → Settings → Pages, set Source to "GitHub Actions" (first time only).
+3. The site will be at `https://<owner>.github.io/<repo>/`.
+
+Local preview: `npm run build && npm run preview`
 
 ## Can I connect a custom domain to my Lovable project?
 
