@@ -19,7 +19,7 @@ const Index = () => {
           <div className="max-w-2xl text-white animate-fade-in">
             <div className="flex items-center gap-3 mb-6">
               <Package className="h-16 w-16" />
-              <h1 className="text-6xl font-bold">ShipFast</h1>
+              <h1 className="text-6xl font-bold">FlinTrack</h1>
             </div>
             <h2 className="text-4xl font-bold mb-6">
               Professional Logistics Made Simple
@@ -32,11 +32,6 @@ const Index = () => {
               <Link to="/auth">
                 <Button size="lg" variant="secondary" className="gap-2">
                   Get Started
-                </Button>
-              </Link>
-              <Link to="/auth">
-                <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                  Sign In
                 </Button>
               </Link>
             </div>

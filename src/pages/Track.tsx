@@ -3,7 +3,7 @@ import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Search, Package, TruckIcon, CheckCircle2, MapPin } from "lucide-react";
+import { Search, Package, TruckIcon, CheckCircle2, MapPin, Calendar, Clock } from "lucide-react";
 
 const Track = () => {
   const [trackingNumber, setTrackingNumber] = useState("");
@@ -17,40 +17,34 @@ const Track = () => {
 
   const trackingEvents = [
     {
-      status: "Delivered",
-      location: "Los Angeles, CA",
-      date: "Jan 15, 2024",
-      time: "2:45 PM",
+      status: "In Transit",
+      description: "Package is in transit to next facility",
+      location: "Philadelphia Distribution Center, PA",
+      date: "Oct 14, 2025",
+      time: "2:00 PM",
       icon: CheckCircle2,
-      color: "text-success",
-      active: true,
-    },
-    {
-      status: "Out for Delivery",
-      location: "Los Angeles Distribution Center",
-      date: "Jan 15, 2024",
-      time: "8:30 AM",
-      icon: TruckIcon,
-      color: "text-primary",
-      active: true,
+      tone: "success",
+      latest: true,
     },
     {
       status: "In Transit",
-      location: "Phoenix, AZ",
-      date: "Jan 14, 2024",
-      time: "11:20 AM",
-      icon: Package,
-      color: "text-primary",
-      active: true,
+      description: "Package arrived at Chicago facility",
+      location: "Chicago Hub, IL",
+      date: "Oct 13, 2025",
+      time: "7:50 PM",
+      icon: TruckIcon,
+      tone: "primary",
+      latest: false,
     },
     {
       status: "Picked Up",
-      location: "New York, NY",
-      date: "Jan 13, 2024",
-      time: "3:15 PM",
-      icon: MapPin,
-      color: "text-muted-foreground",
-      active: true,
+      description: "Package picked up from sender",
+      location: "San Francisco, CA",
+      date: "Oct 11, 2025",
+      time: "2:45 PM",
+      icon: Package,
+      tone: "secondary",
+      latest: false,
     },
   ];
 
@@ -115,13 +109,28 @@ const Track = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid gap-4 md:grid-cols-2">
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">From</p>
-                    <p className="font-medium">New York, NY 10001</p>
+                  {/* From card */}
+                  <div className="flex items-start gap-3 p-4 rounded-xl border bg-card/50">
+                    <div className="h-10 w-10 rounded-lg bg-primary-light flex items-center justify-center">
+                      <MapPin className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">From</p>
+                      <p className="text-lg font-semibold leading-tight">Acme Corporation</p>
+                      <p className="text-sm text-muted-foreground">New York, NY 10001</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">To</p>
-                    <p className="font-medium">Los Angeles, CA 90001</p>
+
+                  {/* To card */}
+                  <div className="flex items-start gap-3 p-4 rounded-xl border bg-card/50">
+                    <div className="h-10 w-10 rounded-lg bg-success-light flex items-center justify-center">
+                      <MapPin className="h-5 w-5 text-success" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-muted-foreground">To</p>
+                      <p className="text-lg font-semibold leading-tight">Tech Solutions Inc</p>
+                      <p className="text-sm text-muted-foreground">Los Angeles, CA 90001</p>
+                    </div>
                   </div>
                 </div>
               </CardContent>
@@ -134,44 +143,83 @@ const Track = () => {
                 <CardDescription>Follow your shipment's journey</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="space-y-0">
-                  {trackingEvents.map((event, index) => (
-                    <div key={index} className="relative">
-                      <div className="flex gap-4 pb-8 last:pb-0">
-                        {/* Timeline line */}
+                <div className="space-y-5">
+                  {trackingEvents.map((event, index) => {
+                    const isLatest = event.latest;
+                    const tone =
+                      event.tone === "success"
+                        ? { dot: "bg-success", bg: "bg-success-light border-success/30" }
+                        : event.tone === "primary"
+                        ? { dot: "bg-primary", bg: "bg-card border-border" }
+                        : { dot: "bg-muted", bg: "bg-card border-border" };
+                    return (
+                      <div key={index} className="relative animate-fade-in" style={{ animationDelay: `${index * 120}ms` }}>
+                        {/* Vertical line */}
                         {index < trackingEvents.length - 1 && (
-                          <div className="absolute left-5 top-12 h-full w-0.5 bg-border" />
+                          <div className="absolute left-5 top-12 h-[calc(100%+20px)] w-0.5 bg-border" />
                         )}
 
-                        {/* Icon */}
-                        <div
-                          className={`relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${
-                            event.active ? "bg-primary" : "bg-muted"
-                          }`}
-                        >
-                          <event.icon
-                            className={`h-5 w-5 ${
-                              event.active ? "text-primary-foreground" : "text-muted-foreground"
-                            }`}
-                          />
-                        </div>
+                        <div className="flex gap-4">
+                          {/* status dot */}
+                          <div className={`relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${tone.dot}`}>
+                            <event.icon className="h-5 w-5 text-primary-foreground" />
+                          </div>
 
-                        {/* Content */}
-                        <div className="flex-1 pt-1">
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <p className="font-semibold">{event.status}</p>
-                              <p className="text-sm text-muted-foreground">{event.location}</p>
-                            </div>
-                            <div className="text-right text-sm text-muted-foreground">
-                              <p>{event.date}</p>
-                              <p>{event.time}</p>
+                          {/* card */}
+                          <div className={`flex-1 p-4 rounded-xl border ${tone.bg} hover-lift` }>
+                            <div className="flex items-start justify-between">
+                              <div className="space-y-1">
+                                <p className="font-semibold">{event.status}</p>
+                                <p className="text-sm text-muted-foreground">{event.description}</p>
+                                <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                                  <span className="inline-flex items-center gap-2"><MapPin className="h-4 w-4" />{event.location}</span>
+                                  <span className="inline-flex items-center gap-2"><Calendar className="h-4 w-4" />{event.date}</span>
+                                  <span className="inline-flex items-center gap-2"><Clock className="h-4 w-4" />{event.time}</span>
+                                </div>
+                              </div>
+                              {isLatest && (
+                                <span className="text-xs px-2 py-0.5 rounded-full bg-success-light text-success">Latest</span>
+                              )}
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Package Information */}
+            <Card className="card-shadow">
+              <CardHeader>
+                <CardTitle>Package Information</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid gap-8 md:grid-cols-4">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Weight</p>
+                    <p className="text-xl font-semibold mt-1">5.5 kg</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Dimensions</p>
+                    <p className="text-xl font-semibold mt-1">40×30×20 cm</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Quantity</p>
+                    <p className="text-xl font-semibold mt-1">1</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">Cost</p>
+                    <p className="text-xl font-semibold mt-1">$ 45.99</p>
+                  </div>
+                </div>
+
+                <div className="my-6 h-px w-full bg-border" />
+
+                <div>
+                  <p className="text-sm text-muted-foreground">Description</p>
+                  <p className="text-lg font-medium mt-1">Electronic Components</p>
                 </div>
               </CardContent>
             </Card>

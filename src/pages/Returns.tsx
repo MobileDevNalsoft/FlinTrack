@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { RotateCcw, FileText, Package } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const Returns = () => {
   const [orderNumber, setOrderNumber] = useState("");
@@ -31,6 +32,15 @@ const Returns = () => {
       trackingNumber: "RET-TRK-002",
     },
   ];
+
+  const [detailsOpen, setDetailsOpen] = useState(false);
+  const [selectedReturnId, setSelectedReturnId] = useState<string | null>(null);
+  const selectedReturn = activeReturns.find((r) => r.id === selectedReturnId) || null;
+
+  const openDetails = (id: string) => {
+    setSelectedReturnId(id);
+    setDetailsOpen(true);
+  };
 
   const handleSubmit = () => {
     if (!orderNumber || !reason) {
@@ -187,7 +197,7 @@ const Returns = () => {
                     <span className={`status-badge ${getStatusColor(returnItem.status)}`}>
                       {returnItem.status}
                     </span>
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="sm" onClick={() => openDetails(returnItem.id)}>
                       View Details
                     </Button>
                   </div>
@@ -196,6 +206,23 @@ const Returns = () => {
             </div>
           </CardContent>
         </Card>
+        {/* View Details Dialog */}
+        <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Return Details</DialogTitle>
+            </DialogHeader>
+            {selectedReturn && (
+              <div className="space-y-3 text-sm">
+                <div className="flex justify-between"><span className="text-muted-foreground">Return ID</span><span className="font-medium">{selectedReturn.id}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Order</span><span className="font-medium">{selectedReturn.orderNumber}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Tracking</span><span className="font-medium">{selectedReturn.trackingNumber}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Status</span><span className={`status-badge ${getStatusColor(selectedReturn.status)}`}>{selectedReturn.status}</span></div>
+                <div className="flex justify-between"><span className="text-muted-foreground">Date</span><span className="font-medium">{selectedReturn.date}</span></div>
+              </div>
+            )}
+          </DialogContent>
+        </Dialog>
       </div>
     </Layout>
   );

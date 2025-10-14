@@ -70,7 +70,7 @@ const Layout = ({ children }: LayoutProps) => {
               <SheetContent side="left" className="w-64 p-0">
                 <div className="flex h-16 items-center border-b px-6">
                   <Package className="h-6 w-6 text-primary" />
-                  <span className="ml-2 text-xl font-bold gradient-text">ShipFast</span>
+                  <span className="ml-2 text-xl font-bold gradient-text">FlinTrack</span>
                 </div>
                 <nav className="flex flex-col gap-2 p-4">
                   <NavLinks />
@@ -81,7 +81,7 @@ const Layout = ({ children }: LayoutProps) => {
             {/* Logo */}
             <Link to="/dashboard" className="flex items-center gap-2">
               <Package className="h-7 w-7 text-primary" />
-              <span className="text-xl font-bold gradient-text">ShipFast</span>
+              <span className="text-xl font-bold gradient-text">FlinTrack</span>
             </Link>
           </div>
 
